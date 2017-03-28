@@ -16,5 +16,5 @@ dir:
 .PHONY: clean
 
 clean:
-	rm -f tsh
+	rm -f $(DIR)/tsh
 	clear
