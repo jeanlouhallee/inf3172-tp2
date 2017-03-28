@@ -62,7 +62,6 @@ fin.o: fin.c
 
 clean:
 	rm -f $(DIR)/tsh
-<<<<<<< HEAD
 	#rm -f $(DIR)/new
 	#rm -f $(DIR)/list
 	#rm -f $(DIR)/rmall
@@ -70,6 +69,3 @@ clean:
 	#rm -f $(DIR)/size
 	#rm -f $(DIR)/fin
 	clear
-=======
-	clear
->>>>>>> f82a872e71bafab76bd98b6f58d9462b26526aa8
