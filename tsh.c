@@ -9,34 +9,34 @@
 int main(void){
     pid_t id;
     int statut;
-    char commande[56];
+    char input[56];
+    char path[56];
     char *newArgv[] = {NULL};
     char *envp[] = {NULL};
     
     while(1){
         printf("tsh> ");
-        
-        char *exe = fgets(commande, sizeof(commande), stdin);
+        char *exe = fgets(input, sizeof(input), stdin);
         
         if(exe != NULL){
-            exe[strlen(commande) - 1] = '\0';
-            id = fork();
-
-            if(!strcmp(commande, "exit")) exit(0);
-
-            if(id != 0){
-                printf("Parent: %d \n", getpid());
-                wait(NULL);
-            }else{
-                printf("Enfant: %d\n", getpid());
-                if(execve(commande, newArgv, envp) == -1){
-                    kill(getpid(), SIGKILL);
-                }
-            }
-            //free(commande);
-            //system("ps");
-            //system("ps");
+            exe[strlen(input) - 1] = '\0';
+            if(!strcmp(input, "exit")) exit(0);
             
+            if(strcmp(exe, "\0")){
+                memset(path, 0, sizeof(path));
+                strcpy(path, "/home/jon/inf3172/bin/");
+                strcat(path, input);
+                id = fork();
+                if(id != 0){
+                    wait(NULL);
+
+                }else{
+                    if(execve(path, newArgv, envp) == -1){
+                        printf("Commande introuvable.\n");
+                        kill(getpid(), SIGKILL);
+                    }
+                } 
+            }
         }
     }
     printf("Process %d terminating.\n", getpid());
