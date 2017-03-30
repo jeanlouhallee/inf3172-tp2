@@ -1,6 +1,6 @@
 DIR := ~/inf3172/bin
 
-all: dir tsh new rmall #list newdir size fin
+all: dir tsh new rmall newdir #list size fin
 	rm *.o
 	#clear
 
@@ -22,18 +22,18 @@ new.o: new.c
 	gcc -c -g -W -Wall new.c
 
 
-rmall: rmall.o
-	gcc -o $(DIR)/rmall rmall.o
-
-rmall.o: rmall.c
-	gcc -c -g -W -Wall rmall.c
-
-
 list: list.o
 	gcc -o $(DIR)/list list.o
 
 list.o: list.c
 	gcc -c -g -W -Wall list.c
+
+
+rmall: rmall.o
+	gcc -o $(DIR)/rmall rmall.o
+
+rmall.o: rmall.c
+	gcc -c -g -W -Wall rmall.c
 
 
 newdir: newdir.o
@@ -63,9 +63,9 @@ fin.o: fin.c
 clean:
 	rm -f $(DIR)/tsh
 	rm -f $(DIR)/new
-	rm -f $(DIR)/rmall
 	#rm -f $(DIR)/list
-	#rm -f $(DIR)/newdir
+	rm -f $(DIR)/rmall
+	rm -f $(DIR)/newdir
 	#rm -f $(DIR)/size
 	#rm -f $(DIR)/fin
 	clear
