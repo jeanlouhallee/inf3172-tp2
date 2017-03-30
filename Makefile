@@ -63,6 +63,7 @@ fin.o: fin.c
 clean:
 	rm -f $(DIR)/tsh
 	rm -f $(DIR)/new
+	#rm -f $(DIR)/new
 	#rm -f $(DIR)/list
 	#rm -f $(DIR)/rmall
 	#rm -f $(DIR)/newdir
