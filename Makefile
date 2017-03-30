@@ -1,60 +1,60 @@
 DIR := ~/inf3172/bin
 
-all: dir tsh #new list rmall newdir size fin
+all: dir tsh new #list rmall newdir size fin
 	rm *.o
-	clear
+	#clear
 
 dir:
 	if [ ! -d $(DIR) ]; then mkdir -p $(DIR); fi;
 
 
 tsh: tsh.o
-	gcc -pthread -o $(DIR)/tsh tsh.c
+	gcc -o $(DIR)/tsh tsh.o
 
 tsh.o: tsh.c
-	gcc -c tsh.c
+	gcc -c -g -W -Wall tsh.c
 
 
 new: new.o
-	gcc -pthread -o $(DIR)/new new.c
+	gcc -o $(DIR)/new new.o
 
 new.o: new.c
-	gcc -c new.c
+	gcc -c -g -W -Wall new.c
 
 
 list: list.o
-	gcc -pthread -o $(DIR)/list list.c
+	gcc -o $(DIR)/list list.o
 
 list.o: list.c
-	gcc -c list.c
+	gcc -c -g -W -Wall list.c
 
 
 rmall: rmall.o
-	gcc -pthread -o $(DIR)/rmall rmall.c
+	gcc -o $(DIR)/rmall rmall.o
 
 rmall.o: rmall.c
-	gcc -c rmall.c
+	gcc -c -g -W -Wall rmall.c
 
 
 newdir: newdir.o
-	gcc -pthread -o $(DIR)/newdir newdir.c
+	gcc -o $(DIR)/newdir newdir.o
 
 newdir.o: newdir.c
-	gcc -c newdir.c
+	gcc -c -g -W -Wall newdir.c
 
 
 size: size.o
-	gcc -pthread -o $(DIR)/size size.c
+	gcc -o $(DIR)/size size.o
 
 size.o: size.c
-	gcc -c size.c
+	gcc -c -g -W -Wall size.c
 
 
 fin: fin.o
-	gcc -pthread -o $(DIR)/fin fin.c
+	gcc -o $(DIR)/fin fin.o
 
 fin.o: fin.c
-	gcc -c fin.c
+	gcc -c -g -W -Wall fin.c
 
 
 .PHONY: clean
@@ -62,14 +62,10 @@ fin.o: fin.c
 
 clean:
 	rm -f $(DIR)/tsh
-<<<<<<< HEAD
-	#rm -f $(DIR)/new
+	rm -f $(DIR)/new
 	#rm -f $(DIR)/list
 	#rm -f $(DIR)/rmall
 	#rm -f $(DIR)/newdir
 	#rm -f $(DIR)/size
 	#rm -f $(DIR)/fin
 	clear
-=======
-	clear
->>>>>>> f82a872e71bafab76bd98b6f58d9462b26526aa8
