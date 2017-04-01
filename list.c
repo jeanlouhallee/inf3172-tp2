@@ -2,10 +2,12 @@
 #include <stdio.h>
 #include <dirent.h>
 #include <string.h>
+#include <unistd.h>
 
 int main(int argc, char *argv[]){
     DIR* dir;
     struct dirent *ent;
+    char cwd[1024];
     
     if(argc > 2 || (argc == 2 && strcmp(argv[1], "-d") != 0)){
         fprintf(stderr, "Option invalide ou arguments en trop\n");
@@ -17,14 +19,20 @@ int main(int argc, char *argv[]){
         return EXIT_FAILURE;
     }
 
-    while((ent = readdir(dir)) != NULL){
-        if(argc == 2){
+    getcwd(cwd, sizeof(cwd));
+
+    if(argc == 2){
+        printf("Sous-répertoires de %s\n", cwd);
+        while((ent = readdir(dir)) != NULL){
             if(ent->d_type == DT_DIR && strcmp(ent->d_name, ".") != 0 && strcmp(ent->d_name, "..") != 0)
                 printf("%s\n", ent->d_name);
-        }else{
+        }
+    }else{
+        printf("Fichiers de %s\n", cwd);
+        while((ent = readdir(dir)) != NULL){
             if(ent->d_type != DT_DIR)
                 printf("%s\n", ent->d_name);
-        }    
+        }
     }
 
     closedir(dir);
