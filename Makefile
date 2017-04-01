@@ -1,6 +1,6 @@
 DIR := ~/inf3172/bin
 
-all: dir tsh new list rmall newdir #size fin
+all: dir tsh new list rmall newdir size #fin
 	rm *.o
 	#clear
 
@@ -66,6 +66,6 @@ clean:
 	rm -f $(DIR)/list
 	rm -f $(DIR)/rmall
 	rm -f $(DIR)/newdir
-	#rm -f $(DIR)/size
+	rm -f $(DIR)/size
 	#rm -f $(DIR)/fin
 	clear
