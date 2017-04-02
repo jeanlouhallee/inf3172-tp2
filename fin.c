@@ -1,14 +1,12 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#define MAX_LIGNE 1000 // ???
-
 int main(int argc, char *argv[]){
     FILE* fichier;
     long nbLignes;
     long totalLignes = 0;
     long debutLignes;
-    char ligne[MAX_LIGNE];
+    char c;
 
     if(argc != 3){
         fprintf(stderr, "Arguments manquants ou en trop\n");
@@ -25,14 +23,16 @@ int main(int argc, char *argv[]){
         return EXIT_FAILURE;
     }
 
-    while(fgets(ligne, MAX_LIGNE, fichier) != NULL) totalLignes++;
-    debutLignes = totalLignes - nbLignes;
+    while((c = fgetc(fichier)) != EOF)
+        if(c == '\n') ++totalLignes;
+    debutLignes = ++totalLignes - nbLignes;
     rewind(fichier);
 
-    for(int i = 0; i < debutLignes; i++)
-        fgets(ligne, MAX_LIGNE, fichier);
-    while(fgets(ligne, MAX_LIGNE, fichier) != NULL)
-        printf("%s", ligne);
+    for(int i = 0; i < debutLignes; ++i)
+        while((c = fgetc(fichier)) != '\n');
+
+    while((c = fgetc(fichier)) != EOF)
+        printf("%c", c);
     printf("\n");
 
     fclose(fichier);
