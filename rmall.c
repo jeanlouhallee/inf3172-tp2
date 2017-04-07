@@ -1,6 +1,7 @@
+#define _XOPEN_SOURCE 500
+#include <ftw.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include <ftw.h>
 #include <unistd.h>
 
 int verifierPermissions(const char *nom);
