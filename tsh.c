@@ -23,9 +23,9 @@ void tokenize(char *string, char *newArgv[], int nbToken){
     newArgv[nbToken] = "NULL";
     for(int i = 0; i <= nbToken; ++i){
         if(newArgv[i] != NULL){
-            printf("ARGV: %s\n", newArgv[i]);
+            printf("ARGV: .%s.\n", newArgv[i]);
         }else{
-            printf("ARGV: NULLL\n");
+            printf("ARGV: .NULLL.\n");
         }
     }
     exec[strlen(exec)] = '\0';
