@@ -17,7 +17,7 @@ int main(int argc, char *argv[]){
         return EXIT_FAILURE;
     }
 
-    if(nftw(nom, calculerTaille, 1, 0) == -1){
+    if(ftw(nom, calculerTaille, 1) == -1){
         fprintf(stderr, "Répertoire introuvable\n");
         return EXIT_FAILURE;
     }
