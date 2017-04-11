@@ -5,6 +5,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <errno.h>
+
+#define PATH "/home/jon/inf3172/bin/"
+
 void cd(char *argv){
     if(chdir(argv) == -1){
         printf("%s\n", strerror(errno));
@@ -30,14 +33,16 @@ void parse(char *line, char *argv[], int nbToken){
 void execute(char **argv){
     pid_t pid;
     int status;
-    char *envp[] = {"PATH=/home/jon/inf3172/bin", NULL};
+    char *envp[] = {NULL};
+    char path[sizeof(argv[0]) + sizeof(PATH)] = PATH;
+    strcat(path, argv[0]);
 
     if((pid = fork()) < 0){
         //perror("Erreur de fork\n"); //
         printf("%s\n", strerror(errno));
         exit(1);
     }else if(pid == 0){
-        if(execve(argv[0], argv, envp) < 0){
+        if(execve(path, argv, envp) < 0){
             //perror("Erreur de execve.\n"); //
             printf("%s\n", strerror(errno));
             exit(1);
