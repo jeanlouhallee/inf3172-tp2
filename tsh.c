@@ -6,11 +6,26 @@
 #include <string.h>
 #include <errno.h>
 
-#define PATH "/home/jon/inf3172/bin/"
+#define MAX_SIZE 128
 
+void getPath(char path[]){
+    if(getcwd(path, sizeof(char) * MAX_SIZE) == NULL){
+        perror("Can't get working directory.\n");
+    } else{
+        strcat(path, "/"); 
+    }
+}
+void cdir(){
+    char dir[MAX_SIZE];
+    if(getcwd(dir, sizeof(dir)) == NULL){
+        perror("Can't get working directory.\n");
+    } else{
+        printf("Repertoire courant : %s\n", dir);
+    }
+}
 void cd(char *argv){
     if(chdir(argv) == -1){
-        printf("%s\n", strerror(errno));
+        perror("Repertoire introuvable.\n");
     }
 }
 
@@ -22,28 +37,27 @@ void parse(char *line, char *argv[], int nbToken){
     for(int i = 0; i < nbToken; ++i){
         argv[i] = token;
         token = strtok(NULL, delimiter);
-
-        //printf("ARGV %d : %s\n", i, argv[i]);
     }
     argv[nbToken] = NULL;
 
     return;
 }
 
-void execute(char **argv){
+void execute(char **argv, char *path){
     pid_t pid;
     int status;
     char *envp[] = {NULL};
-    char path[sizeof(argv[0]) + sizeof(PATH)] = PATH;
-    strcat(path, argv[0]);
+    char exec[MAX_SIZE];
+    strcpy(exec, path);
+    strcat(exec, argv[0]);
 
     if((pid = fork()) < 0){
-        //perror("Erreur de fork\n"); //
+        //perror("Erreur de fork\n"); 
         printf("%s\n", strerror(errno));
         exit(1);
     }else if(pid == 0){
-        if(execve(path, argv, envp) < 0){
-            //perror("Erreur de execve.\n"); //
+        if(execve(exec, argv, envp) < 0){
+            //perror("Erreur de execve.\n"); 
             printf("%s\n", strerror(errno));
             exit(1);
         }
@@ -56,14 +70,11 @@ void execute(char **argv){
 
 int main(void){
     int  exit = 0;
-    char line[1024];
-    char dir[1024];
-
+    char line[MAX_SIZE] = {};
+    char path[MAX_SIZE] = {};
+    getPath(path);
     while(!exit){
-        if(getcwd(dir, sizeof(dir)) == NULL){
-            perror("Problem with curring working directory.\n");
-        }
-        printf("tsh %s> ", dir);
+        printf("tsh > ");
 
         if(fgets(line, sizeof(line), stdin) != NULL){   
             int nbToken = 1;
@@ -71,16 +82,20 @@ int main(void){
                 if(line[i]==' ') ++nbToken;
 
             char *argv[nbToken + 1];
-
             parse(line, argv, nbToken);
 
             if(argv[0] != NULL){
-                if(strncmp(argv[0], "exit", 4) == 0)
+                if(strcmp(argv[0], "exit") == 0){
                     exit = 1;
-                else if(strncmp(argv[0], "cd", 2) == 0)
-                    cd(argv[1]);
-                else 
-                    execute(argv);
+                }else if(strcmp(argv[0], "cdir") == 0){
+                    cdir();
+                }else if(strcmp(argv[0], "cd") == 0){
+                    if(nbToken != 1){
+                        cd(argv[1]);
+                    }
+                }else{ 
+                    execute(argv, path);
+                }
             }
         }
     }
