@@ -1,80 +1,82 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <string.h>
 #include <sys/types.h>
 #include <sys/wait.h>
-#include <signal.h>
+#include <unistd.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <errno.h>
+void cd(char *argv){
+    if(chdir(argv) == -1){
+        printf("%s\n", strerror(errno));
+    }
+}
 
-void tokenize(char *string, char *newArgv[], int nbToken){
-    int index = 0;
-    char *token;
-    char *exec;
-    for(int i = 0; i <= nbToken; ++i){
-        newArgv[i] = calloc(20, sizeof(char));
+void parse(char *line, char *argv[], int nbToken){   
+    char* delimiter = " \n\t";
+    
+    char *token = strtok(line, delimiter);
+
+    for(int i = 0; i < nbToken; ++i){
+        argv[i] = token;
+        token = strtok(NULL, delimiter);
+
+        //printf("ARGV %d : %s\n", i, argv[i]);
     }
-    token = strtok(string, " ");
-    exec = token;
-    while(token != NULL){
-        token = strtok(NULL, " ");
-        newArgv[index] = token;
-        ++index;
-    }
-    newArgv[nbToken] = "NULL";
-    for(int i = 0; i <= nbToken; ++i){
-        if(newArgv[i] != NULL){
-            printf("ARGV: .%s.\n", newArgv[i]);
-        }else{
-            printf("ARGV: .NULLL.\n");
+    argv[nbToken] = NULL;
+
+    return;
+}
+
+void execute(char **argv){
+    pid_t pid;
+    int status;
+    char *envp[] = {"PATH=/home/jon/inf3172/bin", NULL};
+
+    if((pid = fork()) < 0){
+        //perror("Erreur de fork\n"); //
+        printf("%s\n", strerror(errno));
+        exit(1);
+    }else if(pid == 0){
+        if(execve(argv[0], argv, envp) < 0){
+            //perror("Erreur de execve.\n"); //
+            printf("%s\n", strerror(errno));
+            exit(1);
         }
+    }else{
+        while (wait(&status) != pid);
     }
-    exec[strlen(exec)] = '\0';
-    string = exec;
+
+    return;
 }
 
 int main(void){
-    pid_t id;
-    int nbToken;
-    //int statut;
-    char *allo[] = {NULL, "-d", NULL};
-    char input[56];
-    char path[56];
-    char *envp[] = {NULL};
+    int  exit = 0;
+    char line[1024];
+    char dir[1024];
 
-    while(1){
-        printf("tsh> ");
+    while(!exit){
+        if(getcwd(dir, sizeof(dir)) == NULL){
+            perror("Problem with curring working directory.\n");
+        }
+        printf("tsh %s> ", dir);
 
-        char *exe = fgets(input, sizeof(input), stdin);
-        
-        if(exe != NULL && strcmp(exe, "\n")){
-            exe[strlen(input) - 1] = '\0';
-            if(!strcmp(input, "exit")) exit(0);
-            char *temp = malloc(sizeof(char) * strlen(exe));
-            strcpy(temp, exe);
-        
-            for(nbToken = 0; temp[nbToken]; temp[nbToken]==' ' ? ++nbToken : *temp++);
-        
-            char *newArgv[nbToken + 1];
-            tokenize(exe, newArgv, nbToken);
+        if(fgets(line, sizeof(line), stdin) != NULL){   
+            int nbToken = 1;
+            for(int i = 0; line[i] != '\0'; ++i)
+                if(line[i]==' ') ++nbToken;
 
-            if(strcmp(exe, "\0")){
-                memset(path, 0, sizeof(path));
-                strcpy(path, "/home/jon/inf3172/bin/");
-                strcat(path, input);
-                id = fork();
-                if(id != 0){
-                    wait(NULL);
+            char *argv[nbToken + 1];
 
-                }else{
-                    if(execve(path, allo, envp) == -1){
-                        printf("Commande introuvable.\n");
-                        kill(getpid(), SIGKILL);
-                    }
-                } 
+            parse(line, argv, nbToken);
+
+            if(argv[0] != NULL){
+                if(strncmp(argv[0], "exit", 4) == 0)
+                    exit = 1;
+                else if(strncmp(argv[0], "cd", 2) == 0)
+                    cd(argv[1]);
+                else 
+                    execute(argv);
             }
         }
     }
-    printf("Process %d terminating.\n", getpid());
-    return 0;
 }
-

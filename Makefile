@@ -3,7 +3,7 @@ CC = gcc
 SRCS = $(wildcard *.c)
 OBJS = $(patsubst %.c, %.o, $(SRCS))
 EXECS = $(patsubst %.c, %, $(SRCS))
-DIR = ~/test3172/test
+DIR = ~/inf3172/bin
 
 .PHONY: all clean
 
