@@ -2,10 +2,12 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <unistd.h>
+#include <sys/stat.h>
 
 int main(int argc, char *argv[]){
     FTS *contenu;
     FTSENT *fichier;
+    struct stat buf;
     char *nom[2] = {argv[1], NULL};
 
     if(argc != 2){
@@ -13,7 +15,8 @@ int main(int argc, char *argv[]){
         return EXIT_FAILURE;
     }
 
-    if(access(nom[0], F_OK) == -1){
+    stat(nom[0], &buf);
+    if(access(nom[0], F_OK) == -1 || !S_ISDIR(buf.st_mode)){
         fprintf(stderr, "Répertoire introuvable\n");
         return EXIT_FAILURE;
     }

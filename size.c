@@ -18,7 +18,8 @@ int main(int argc, char *argv[]){
         return EXIT_FAILURE;
     }
 
-    if(access(nom[0], F_OK) == -1){
+    stat(nom[0], &buf);
+    if(access(nom[0], F_OK) == -1 || !S_ISDIR(buf.st_mode)){
         fprintf(stderr, "Répertoire introuvable\n");
         return EXIT_FAILURE;
     }

@@ -1,8 +1,11 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <sys/stat.h>
 
 int main(int argc, char *argv[]){
     FILE* fichier;
+    struct stat buf;
+    char *nom = argv[2];
     long nbLignes;
     long totalLignes = 0;
     long debutLignes;
@@ -18,7 +21,8 @@ int main(int argc, char *argv[]){
         return EXIT_FAILURE;
     }
 
-    if((fichier = fopen(argv[2], "r")) == NULL){
+    stat(nom, &buf);
+    if((fichier = fopen(argv[2], "r")) == NULL || S_ISDIR(buf.st_mode)){
         fprintf(stderr, "Fichier introuvable\n");
         return EXIT_FAILURE;
     }
