@@ -1,3 +1,16 @@
+/*
+ * fin.c : Affiche un certain nombre de lignes d'un fichier a partir de la fin du fichier
+ *
+ * TP2 : Conception d'un shell
+ *
+ * Cours : INF3172 Systeme d'exploitation
+ *
+ * Auteurs : Etienne Bergeron BERE08089101
+ *           Jean-Lou Hallee  HALJ05129309
+ *
+ * Dernières modifications : 16 avril 2017
+ */
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <sys/stat.h>

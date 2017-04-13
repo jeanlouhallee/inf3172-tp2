@@ -7,12 +7,11 @@ DIR = ~/inf3172/bin
 
 .PHONY: all clean
 
-
 all: $(EXECS)
-		if [ ! -d "$(DIR)" ] ; then \
-				mkdir -p $(DIR);				\
-				mv $(EXECS) $(DIR);			\
-		fi																								
+	if [ ! -d "$(DIR)" ] ; then \
+		mkdir -p $(DIR); \
+		mv $(EXECS) $(DIR); \
+	fi																								
 
 clean:
 	rm -f $(OBJS) $(EXECS)

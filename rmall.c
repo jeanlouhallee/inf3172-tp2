@@ -1,3 +1,16 @@
+/*
+ * rmall.c : Supprime un repertoire et tout son contenu
+ *
+ * TP2 : Conception d'un shell
+ *
+ * Cours : INF3172 Systeme d'exploitation
+ *
+ * Auteurs : Etienne Bergeron BERE08089101
+ *           Jean-Lou Hallee  HALJ05129309
+ *
+ * Dernières modifications : 16 avril 2017
+ */
+
 #include <fts.h>
 #include <stdlib.h>
 #include <stdio.h>

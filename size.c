@@ -1,3 +1,16 @@
+/*
+ * size.c : Affiche le nombre de fichiers dans le repertoire et la taille du repertoire
+ *
+ * TP2 : Conception d'un shell
+ *
+ * Cours : INF3172 Systeme d'exploitation
+ *
+ * Auteurs : Etienne Bergeron BERE08089101
+ *           Jean-Lou Hallee  HALJ05129309
+ *
+ * Dernières modifications : 16 avril 2017
+ */
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <dirent.h>
